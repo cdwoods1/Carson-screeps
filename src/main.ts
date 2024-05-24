@@ -38,7 +38,7 @@ declare global {
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
-  console.log(`Current game tick is ${Game.time}`);
+  //console.log(`Current game tick is ${Game.time}`);
 
   // Automatically delete memory of missing creeps
   for (const name in Memory.creeps) {
@@ -46,6 +46,8 @@ export const loop = ErrorMapper.wrapLoop(() => {
       delete Memory.creeps[name];
     }
   }
+
+  // TODO: Think about this a bit, and see if I might be able to use something like this to maintain the right number of harvesters per room.
   if (!Game.creeps["Harvester1"]) {
     console.log("spawning something");
     Game.spawns["Spawn1"].spawnCreep([WORK,MOVE,CARRY], "Harvester1");
