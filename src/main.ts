@@ -1,8 +1,10 @@
 import { ErrorMapper } from "utils/ErrorMapper";
 import { Harvester } from "roles/harvester";
 import { Upgrader } from "roles/upgrader";
+import { Defender } from "roles/defender";
 import { Builder } from "roles/builder";
 import { AutoSpawn } from "autospawn";
+import { Repairer } from "roles/repairer";
 
 declare global {
   /*
@@ -25,6 +27,7 @@ declare global {
     working?: boolean;
     upgrading?: boolean;
     building?: boolean;
+    repairing?: boolean;
   }
 
   // Syntax for adding proprties to `global` (ex "global.log")
@@ -47,12 +50,6 @@ export const loop = ErrorMapper.wrapLoop(() => {
     }
   }
 
-  // TODO: Think about this a bit, and see if I might be able to use something like this to maintain the right number of harvesters per room.
-  if (!Game.creeps["Harvester1"]) {
-    console.log("spawning something");
-    Game.spawns["Spawn1"].spawnCreep([WORK,MOVE,CARRY], "Harvester1");
-  }
-
   AutoSpawn.run();
 
   // Creep behavior loop.
@@ -66,6 +63,12 @@ export const loop = ErrorMapper.wrapLoop(() => {
     }
     if(creep.memory.role == 'builder') {
         Builder.run(creep);
+    }
+    if(creep.memory.role == 'defender') {
+      Defender.run(creep);
+    }
+    if(creep.memory.role == 'repairer') {
+      Repairer.run(creep);
     }
 }
 });
