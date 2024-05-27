@@ -1,9 +1,17 @@
 export class Harvester {
     public static run(creep: Creep): void {
-        if(creep.store.getFreeCapacity() > 0) {
+        if(creep.memory.delivering && creep.store[RESOURCE_ENERGY] == 0) {
+            creep.memory.delivering = false;
+            creep.say('🔄 harvest');
+        }
+        if(!creep.memory.delivering && creep.store.getFreeCapacity() == 0) {
+            creep.memory.delivering = true;
+            creep.say('⚡ deliver');
+        }
+        if(!creep.memory.delivering) {
             var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+            if(creep.harvest(sources[creep.memory.targetSource ?? 0]) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(sources[creep.memory.targetSource ?? 0], {visualizePathStyle: {stroke: '#ffaa00'}});
             }
         }
         else {

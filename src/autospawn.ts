@@ -3,7 +3,7 @@ import { SpawnUtils } from "utils/SpawnUtils";
 export class AutoSpawn {
     public static run(): void {
 
-
+        let sourceIndex = 1;
         let bodyParts = null;
         let name = null;
         let options = undefined;
@@ -21,7 +21,7 @@ export class AutoSpawn {
         } else if (harvesters.length < 3) {
             name = 'Harvester' + Game.time;
             bodyParts = SpawnUtils.getBodyPartsForArchetype('harvester', energyAvailable)
-                options = {memory: {role: 'harvester'}                }
+                options = {memory: {role: 'harvester', targetSource: sourceIndex}                }
         } else if(upgraders.length < 3) {
             name = 'Upgrader' + Game.time;
             bodyParts = SpawnUtils.getBodyPartsForArchetype('upgrader', energyAvailable)

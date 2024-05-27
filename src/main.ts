@@ -28,6 +28,8 @@ declare global {
     upgrading?: boolean;
     building?: boolean;
     repairing?: boolean;
+    targetSource?: number;
+    delivering?: boolean;
   }
 
   // Syntax for adding proprties to `global` (ex "global.log")

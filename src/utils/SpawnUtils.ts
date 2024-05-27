@@ -13,6 +13,7 @@ export class SpawnUtils {
             case 'builder':
             case 'harvester':
             case 'upgrader':
+            case 'repairer':
                 partsPattern = [MOVE, WORK, CARRY];
                 patternCost = 200;
                 break;
