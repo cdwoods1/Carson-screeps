@@ -143,6 +143,10 @@ export class AutoSpawn {
     }
 
     public static getNumberOfUpgradersAndBuilders(roomKey: string) {
+
+        if(Game.rooms[roomKey].controller?.level ?? 0 < 4) {
+            return 3;
+        }
         const room = Game.rooms[roomKey];
         const currentRatio = room.memory.ratioEnumerator;
         const storage = room.find(FIND_STRUCTURES, {
