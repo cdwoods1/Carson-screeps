@@ -1,7 +1,7 @@
 import { SpawnUtils } from "utils/SpawnUtils";
 
 export class AutoSpawn {
-    public static run(spawnName: string, roomKey: RoomKeys): void {
+    public static run(spawnName: string, roomKey: string): void {
 
         const currentRatio = Game.rooms[roomKey].memory.ratioEnumerator;
         // console.log("The current ratio is", currentRatio);
@@ -142,7 +142,7 @@ export class AutoSpawn {
 
     }
 
-    public static getNumberOfUpgradersAndBuilders(roomKey: RoomKeys) {
+    public static getNumberOfUpgradersAndBuilders(roomKey: string) {
         const room = Game.rooms[roomKey];
         const currentRatio = room.memory.ratioEnumerator;
         const storage = room.find(FIND_STRUCTURES, {

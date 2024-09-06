@@ -6,7 +6,7 @@ import { Storage } from "room/storage";
 import { Tower } from "room/tower";
 
 export class RoomService {
-    public static run(roomID: RoomKeys): void {
+    public static run(roomID: string): void {
         RoomService.handleLinks(roomID);
         RoomService.handleTowers(roomID);
         RoomService.handleRamparts(roomID);
@@ -15,7 +15,7 @@ export class RoomService {
         RoomService.handleContainers(roomID);
     }
 
-    private static handleContainers(roomID: RoomKeys): void {
+    private static handleContainers(roomID: string): void {
       for(var container of Game.rooms[roomID].find(FIND_STRUCTURES, {
           filter: (structure) => {
             return structure.structureType === STRUCTURE_CONTAINER;
@@ -25,7 +25,7 @@ export class RoomService {
         }
     }
 
-    private static handleControllers(roomID: RoomKeys): void {
+    private static handleControllers(roomID: string): void {
         for(var controller of Game.rooms[roomID].find(FIND_STRUCTURES, {
             filter: (structure) => {
               return structure.structureType === STRUCTURE_CONTROLLER;
@@ -35,7 +35,7 @@ export class RoomService {
           }
     }
 
-    private static handleStorage(roomID: RoomKeys): void {
+    private static handleStorage(roomID: string): void {
       for(var storage of Game.rooms[roomID].find(FIND_STRUCTURES, {
           filter: (structure) => {
             return structure.structureType === STRUCTURE_STORAGE;
@@ -45,7 +45,7 @@ export class RoomService {
         }
     }
 
-    private static handleLinks(roomID: RoomKeys): void {
+    private static handleLinks(roomID: string): void {
         //TODO: Update these methods to all take a room key.
         for(var link of Game.rooms[roomID].find(FIND_STRUCTURES, {
             filter: (structure) => {
@@ -57,7 +57,7 @@ export class RoomService {
           }
     }
 
-    private static handleTowers(roomID: RoomKeys): void {
+    private static handleTowers(roomID: string): void {
         for(var tower of Game.rooms[roomID].find(FIND_STRUCTURES, {
             filter: (structure) => {
               return structure.structureType === STRUCTURE_TOWER;
@@ -67,7 +67,7 @@ export class RoomService {
           }
     }
 
-    private static handleRamparts(roomID: RoomKeys): void {
+    private static handleRamparts(roomID: string): void {
         for(var rampart of Game.rooms[roomID].find(FIND_STRUCTURES, {
             filter: (structure) => {
               return structure.structureType === STRUCTURE_RAMPART;

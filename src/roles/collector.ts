@@ -11,7 +11,8 @@ export class Collector {
             creep.say('⚡ deliver');
         }
         if(!creep.memory.delivering) {
-            if(creep.room.controller && creep.room.controller?.level < 4) {
+            const recievingLink = Game.rooms[creep.room.name].memory.receivingLink;
+            if(!recievingLink) {
                 const targetContainerID = creep.memory.targetContainerID;
                 if(targetContainerID) {
                     const fullestContainer = Game.getObjectById(targetContainerID);

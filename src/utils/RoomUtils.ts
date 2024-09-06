@@ -4,10 +4,11 @@ import { RoomService } from "roomservice";
 export type RoomKeys = 'W7N5';
 
 export class RoomUtils {
-    public static myRooms: RoomKeys[] = ['W7N5'];
+    public static myRooms = global
 
     public static run(): void {
-        for(const roomKey of RoomUtils.myRooms) {
+        RoomUtils.findMyRooms();
+        for(const roomKey of global.myRooms) {
             const room = Game.rooms[roomKey];
             if(!room) {
                 continue;
@@ -19,10 +20,23 @@ export class RoomUtils {
             }
 
             for(const spawn of spawns) {
-                AutoSpawn.run(spawn.name, roomKey as RoomKeys);
+                AutoSpawn.run(spawn.name, roomKey);
             }
 
-            RoomService.run(roomKey as RoomKeys);
+            RoomService.run(roomKey);
+        }
+    }
+
+    public static findMyRooms(): void {
+        if(global.timeSinceRoomsChecked > 200 || !global.myRooms) {
+            global.myRooms = [];
+            for(const roomKey in Game.rooms) {
+                const room = Game.rooms[roomKey];
+                if(room.controller && room.controller.my) {
+                    global.myRooms.push(roomKey);
+                }
+            }
+            global.timeSinceRoomsChecked = 0;
         }
     }
 }

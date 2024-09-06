@@ -30,6 +30,9 @@ declare global {
   interface Memory {
     uuid: number;
     log: any;
+    // Rooms memory
+    myRooms: string[];
+    timeSinceRoomsChecked: number;
   }
 
   interface StructureLink {
@@ -80,8 +83,13 @@ declare global {
   namespace NodeJS {
     interface Global {
       log: any;
+       // Rooms memory
+      myRooms: string[];
+      timeSinceRoomsChecked: number;
     }
   }
+
+
 }
 
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
