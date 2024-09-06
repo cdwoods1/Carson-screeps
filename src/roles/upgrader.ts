@@ -1,3 +1,5 @@
+import { HarvestingUtils } from "utils/HarvestingUtils";
+
 export class Upgrader {
     public static run(creep: Creep): void {
         if(creep.memory.upgrading && creep.store[RESOURCE_ENERGY] == 0) {
@@ -16,10 +18,7 @@ export class Upgrader {
             }
         }
         else {
-            var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-            }
+           HarvestingUtils.harvestFromContainers(creep, RESOURCE_ENERGY, 0.0);
         }
     }
 }

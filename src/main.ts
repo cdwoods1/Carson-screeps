@@ -5,6 +5,17 @@ import { Defender } from "roles/defender";
 import { Builder } from "roles/builder";
 import { AutoSpawn } from "autospawn";
 import { Repairer } from "roles/repairer";
+import { Collector } from "roles/collector";
+import { RoomService } from "roomservice";
+import { Claimer } from "roles/claimer";
+import { Extensioner } from "roles/extensioner";
+import { RangedAttacker } from "roles/ranged-attacker";
+import { Attacker } from "roles/attacker";
+import { Healer } from "roles/healer";
+import { Immigrant } from "roles/immigrant";
+import { RoomUtils } from "utils/RoomUtils";
+
+export const ATTACK_THOSE_BOIS: boolean = false;
 
 declare global {
   /*
@@ -21,6 +32,10 @@ declare global {
     log: any;
   }
 
+  interface StructureLink {
+    receiver: boolean;
+  }
+
   interface CreepMemory {
     role: string;
     room?: string;
@@ -30,7 +45,30 @@ declare global {
     repairing?: boolean;
     targetSource?: number;
     delivering?: boolean;
+    flag?: string;
+    travelling?: boolean;
+    attack?: boolean;
+
+    objectRepairingID?: Id<Structure>;
   }
+
+
+  interface RoomMemory {
+    receivingLink: Id<StructureLink>;
+
+    previousStorageEnergy: number;
+    currentStorageEnergy: number;
+    ticksSinceLastCheck: number;
+    totalDiffSinceCheck: number;
+    ratioEnumerator: number;
+    ratioTick: number;
+    ratioDiff: number;
+
+    currentContainerEnergy: number;
+
+  }
+
+  type RoomKeys = 'W7N5';
 
   // Syntax for adding proprties to `global` (ex "global.log")
   namespace NodeJS {
@@ -52,7 +90,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
     }
   }
 
-  AutoSpawn.run();
+  RoomUtils.run();
 
   // Creep behavior loop.
   for(var name in Game.creeps) {
@@ -72,5 +110,29 @@ export const loop = ErrorMapper.wrapLoop(() => {
     if(creep.memory.role == 'repairer') {
       Repairer.run(creep);
     }
-}
+    if(creep.memory.role == "collector") {
+      Collector.run(creep);
+    }
+    if(creep.memory.role == 'claimer') {
+      Claimer.run(creep);
+    }
+    if(creep.memory.role == 'extensioner') {
+      Extensioner.run(creep);
+    }
+
+    if(creep.memory.role == 'rangedAttacker') {
+      RangedAttacker.run(creep);
+    }
+
+    if(creep.memory.role == "attacker") {
+      Attacker.run(creep);
+    }
+
+    if(creep.memory.role == "healer") {
+      Healer.run(creep);
+    }
+    if(creep.memory.role == "immigrant") {
+      Immigrant.run(creep);
+    }
+  }
 });
