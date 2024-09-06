@@ -63,7 +63,12 @@ export class AutoSpawn {
             bodyParts = SpawnUtils.getBodyPartsForArchetype('immigrant', energyAvailable);
             options = {memory: {role: 'immigrant'}}
         }
-        if (harvesters.length < numHarvesters) {
+
+        if(extensioner.length < 1 && numHarvesters > 0) {
+            name = 'Extensioner' + Game.time;
+            bodyParts = SpawnUtils.getBodyPartsForArchetype('extensioner', energyAvailable)
+            options = {memory: {role: 'extensioner'} }
+        } else if (harvesters.length < numHarvesters) {
             console.log("spawning harvester");
             name = 'Harvester' + Game.time;
             bodyParts = SpawnUtils.getBodyPartsForArchetype('harvester', energyAvailable)

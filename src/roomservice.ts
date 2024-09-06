@@ -1,3 +1,4 @@
+import { Controller } from "room/controller";
 import { Link } from "room/link";
 import { Rampart } from "room/rampart";
 import { Storage } from "room/storage";
@@ -9,6 +10,17 @@ export class RoomService {
         RoomService.handleTowers(roomID);
         RoomService.handleRamparts(roomID);
         RoomService.handleStorage(roomID);
+        RoomService.handleControllers(roomID);
+    }
+
+    private static handleControllers(roomID: RoomKeys): void {
+        for(var controller of Game.rooms[roomID].find(FIND_STRUCTURES, {
+            filter: (structure) => {
+              return structure.structureType === STRUCTURE_CONTROLLER;
+            }
+          })) {
+            Controller.run(controller as StructureController);
+          }
     }
 
     private static handleStorage(roomID: RoomKeys): void {

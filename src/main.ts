@@ -66,6 +66,8 @@ declare global {
 
     currentContainerEnergy: number;
 
+    closestContainer: Id<StructureContainer>;
+
   }
 
   type RoomKeys = 'W7N5';

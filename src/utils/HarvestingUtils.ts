@@ -57,6 +57,20 @@ export class HarvestingUtils {
         }
 
         if(creep.room.controller && creep.room.controller.level < 4) {
+
+            const container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (structure.structureType === STRUCTURE_CONTAINER) &&
+                        structure.store.getUsedCapacity(resourceType) > 0;
+                }
+            });
+            if(container) {
+                if(creep.withdraw(container, resourceType) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(container, {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
+                return;
+            }
+
             var sources = creep.pos.findClosestByPath(FIND_SOURCES);
             if(sources) {
             if(creep.harvest(sources) == ERR_NOT_IN_RANGE) {
