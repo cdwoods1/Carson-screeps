@@ -69,6 +69,14 @@ export class Harvester {
     }
 
     private static fillAlternateTargets(creep: Creep) {
+
+        const controller = creep.room.controller;
+        if(controller && controller.my && controller.level < 4) {
+            if(creep.upgradeController(controller) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(controller, {visualizePathStyle: {stroke: '#ffffff'}});
+            }
+        }
+
         var targets = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_EXTENSION ||

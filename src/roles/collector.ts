@@ -74,8 +74,6 @@ export class Collector {
                     }
                 });
 
-                console.log(homeContainer);
-
                 if(homeContainer) {
                     if(creep.transfer(homeContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(homeContainer, {visualizePathStyle: {stroke: '#ffffff'}});
