@@ -11,6 +11,25 @@ export class Collector {
             creep.say('⚡ deliver');
         }
         if(!creep.memory.delivering) {
+            if(creep.room.controller && creep.room.controller?.level < 4) {
+                const targetContainerID = creep.memory.targetContainerID;
+                if(targetContainerID) {
+                    const fullestContainer = Game.getObjectById(targetContainerID);
+                    if(fullestContainer) {
+                        if(creep.withdraw(fullestContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(fullestContainer, {visualizePathStyle: {stroke: '#ffaa00'}});
+                        }
+                        return;
+                    }
+                } else {
+                    creep.memory.targetContainerID = Game.rooms[creep.room.name].memory.fullestContainerID;
+                }
+
+                var sources = creep.room.find(FIND_SOURCES);
+                if(creep.harvest(sources[creep.memory.targetSource ?? 0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(sources[creep.memory.targetSource ?? 0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
+            }
             const recievingLinkID = Game.rooms[creep.room.name].memory.receivingLink;
 
             const link = creep.pos.findClosestByRange(FIND_STRUCTURES, {
@@ -42,24 +61,6 @@ export class Collector {
             //     return;
             // }
 
-
-            if(creep.room.controller && creep.room.controller?.level < 4) {
-                const targetContainerID = creep.memory.targetContainerID;
-                if(targetContainerID) {
-                    const fullestContainer = Game.getObjectById(targetContainerID);
-                    if(fullestContainer) {
-                        if(creep.withdraw(fullestContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                            creep.moveTo(fullestContainer, {visualizePathStyle: {stroke: '#ffaa00'}});
-                        }
-                        return;
-                    }
-                }
-
-                var sources = creep.room.find(FIND_SOURCES);
-                if(creep.harvest(sources[creep.memory.targetSource ?? 0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(sources[creep.memory.targetSource ?? 0], {visualizePathStyle: {stroke: '#ffaa00'}});
-                }
-            }
         }
         else {
             if(creep.room.controller && creep.room.controller?.level < 4) {
@@ -71,6 +72,8 @@ export class Collector {
                             Game.rooms[creep.room.name].memory.receivingContainerID === structure.id;
                     }
                 });
+
+                console.log(homeContainer);
 
                 if(homeContainer) {
                     if(creep.transfer(homeContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
