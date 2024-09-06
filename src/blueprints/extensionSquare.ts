@@ -1,7 +1,8 @@
-export type BlueprintFlag = 'flag' | 'road' | 'extension' | 'ground';
+import { BlueprintFlag } from "./blueprint.types";
 
-export class BluePrints {
-    public static extensionSquare: BlueprintFlag[][] = [
+export class ExtensionSqare {
+    public readonly blueprintType = "extensionSquare";
+    public readonly blueprint: BlueprintFlag[][] = [
         ['extension', 'extension', 'extension', 'ground'   , 'extension', 'extension', 'extension'],
         ['extension', 'road'     , 'extension', 'extension', 'extension', 'road'     , 'extension'],
         ['extension', 'extension', 'road'     , 'extension', 'road'     , 'extension', 'extension'],

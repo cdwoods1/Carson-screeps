@@ -77,6 +77,10 @@ declare global {
 
   }
 
+  interface FlagMemory {
+
+  }
+
   type RoomKeys = 'W7N5';
 
   // Syntax for adding proprties to `global` (ex "global.log")
