@@ -3,9 +3,10 @@ export class Collector {
     public static run(creep: Creep): void {
         if(creep.memory.delivering && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.delivering = false;
+            creep.memory.targetContainerID = Game.rooms[creep.room.name].memory.fullestContainerID;
             creep.say('🔄 harvest');
         }
-        if(!creep.memory.delivering &&  creep.store[RESOURCE_ENERGY] > 0) {
+        if(!creep.memory.delivering && creep.store.getFreeCapacity() == 0) {
             creep.memory.delivering = true;
             creep.say('⚡ deliver');
         }
@@ -43,19 +44,15 @@ export class Collector {
 
 
             if(creep.room.controller && creep.room.controller?.level < 4) {
-                const outerContainer = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (
-                            structure.structureType === STRUCTURE_CONTAINER) &&
-                            structure.store.energy > 0 &&
-                            Game.rooms[creep.room.name].memory.closestContainer !== structure.id;
+                const targetContainerID = creep.memory.targetContainerID;
+                if(targetContainerID) {
+                    const fullestContainer = Game.getObjectById(targetContainerID);
+                    if(fullestContainer) {
+                        if(creep.withdraw(fullestContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(fullestContainer, {visualizePathStyle: {stroke: '#ffaa00'}});
+                        }
+                        return;
                     }
-                });
-                if(outerContainer) {
-                    if(creep.withdraw(outerContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(outerContainer, {visualizePathStyle: {stroke: '#ffaa00'}});
-                    }
-                    return;
                 }
 
                 var sources = creep.room.find(FIND_SOURCES);
@@ -71,7 +68,7 @@ export class Collector {
                         return (
                             structure.structureType === STRUCTURE_CONTAINER) &&
                             structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0 &&
-                            Game.rooms[creep.room.name].memory.closestContainer === structure.id;
+                            Game.rooms[creep.room.name].memory.receivingContainerID === structure.id;
                     }
                 });
 

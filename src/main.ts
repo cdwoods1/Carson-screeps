@@ -50,6 +50,9 @@ declare global {
     attack?: boolean;
 
     objectRepairingID?: Id<Structure>;
+
+    // Collector memory.
+    targetContainerID?: Id<StructureContainer>;
   }
 
 
@@ -66,7 +69,8 @@ declare global {
 
     currentContainerEnergy: number;
 
-    closestContainer: Id<StructureContainer>;
+    receivingContainerID: Id<StructureContainer>;
+    fullestContainerID: Id<StructureContainer>;
 
   }
 

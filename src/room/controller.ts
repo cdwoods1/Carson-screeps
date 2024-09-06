@@ -7,9 +7,8 @@ export class Controller {
             }
         });
 
-        // Save the closest container to the controller in memory.
         if(closestContainer) {
-            Game.rooms[controller.room.name].memory.closestContainer = closestContainer.id;
+            Game.rooms[controller.room.name].memory.receivingContainerID = closestContainer.id;
         }
     }
 }
