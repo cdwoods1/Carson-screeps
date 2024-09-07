@@ -10,7 +10,7 @@ export class Attacker {
         }
 
         let attackers = _.filter(Game.creeps, (creep) => creep.memory.role == 'attacker');
-        let rangedAttackers = _.filter(Game.creeps, (creep) => creep.memory.role == 'rangedAttacker');
+        // let rangedAttackers = _.filter(Game.creeps, (creep) => creep.memory.role == 'rangedAttacker');
         let healers = _.filter(Game.creeps, (creep) => creep.memory.role == 'healer');
 
         if(ATTACK_THOSE_BOIS === true) {

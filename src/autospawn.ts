@@ -8,7 +8,7 @@ export class AutoSpawn {
 
         let bodyParts = null;
         let name = null;
-        let options = undefined;
+        let options: {memory: CreepMemory | undefined } | undefined = undefined;
         let defenders = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.room.name === roomKey);
         let harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester'&& creep.room.name === roomKey);
         let upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader'&& creep.room.name === roomKey);
@@ -18,9 +18,10 @@ export class AutoSpawn {
         let claimer = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer');
         let extensioner = _.filter(Game.creeps, (creep) => creep.memory.role == 'extensioner'&& creep.room.name === roomKey);
         let attackers = _.filter(Game.creeps, (creep) => creep.memory.role == 'attacker');
-        let rangedAttackers = _.filter(Game.creeps, (creep) => creep.memory.role == 'rangedAttacker');
+        let sentries = _.filter(Game.creeps, (creep) => creep.memory.role == 'sentry');
         let healers = _.filter(Game.creeps, (creep) => creep.memory.role == 'healer' && creep.room.name === roomKey);
         let immigrants = _.filter(Game.creeps, (creep) => creep.memory.role == 'immigrant');
+        let numHaulers = _.filter(Game.creeps, (creep) => creep.memory.role == 'hauler');
 
         const extensions = Game.spawns[spawnName].room.find(FIND_STRUCTURES, {
             filter: (structure) => {
@@ -32,7 +33,7 @@ export class AutoSpawn {
 
         const controller = Game.rooms[roomKey].controller;
 
-        let numHarvesters = sources.length * 2;
+        let numHarvesters = sources.length;
         let numCollectors = 2;
         if(extensions.length < 10) {
             // numHarvesters = sources.length * 3;
@@ -77,12 +78,23 @@ export class AutoSpawn {
             name = 'Extensioner' + Game.time;
             bodyParts = SpawnUtils.getBodyPartsForArchetype('extensioner', energyAvailable)
             options = {memory: {role: 'extensioner'} }
-        } else if(collectors.length < 1) {
+        } else if(numHaulers.length  < 2) {
+            name = 'Hauler' + Game.time;
+            bodyParts = SpawnUtils.getBodyPartsForArchetype('hauler', energyAvailable)
+            options = {memory: {role: 'hauler'} }
+        }
+        else if(collectors.length < 1) {
             console.log("spawning collector");
             name = 'Collector' + Game.time;
             bodyParts = SpawnUtils.getBodyPartsForArchetype('collector', energyAvailable)
                 options = {memory: {role: 'collector'}                }
-        } else if (defenders.length < 3) {
+        }  else if(sentries.length < AutoSpawn.getSentryNumber(roomKey)) {
+            name = 'Sentry' + Game.time;
+            console.log("spawning sentry");
+            bodyParts = SpawnUtils.getBodyPartsForArchetype('sentry', energyAvailable)
+            options = {memory: {role: 'sentry'} }
+        }
+        else if (defenders.length < 1) {
             name = 'Defender' + Game.time;
             bodyParts = SpawnUtils.getBodyPartsForArchetype('defender', energyAvailable);
             options = {memory: {role: 'defender'}};
@@ -104,7 +116,7 @@ export class AutoSpawn {
                 options = {memory: {role: 'claimer'}            }
         }
 
-            else if(defenders.length < 2) {
+            else if(defenders.length < 1) {
                 name = 'Defender' + Game.time;
                 bodyParts = SpawnUtils.getBodyPartsForArchetype('defender', energyAvailable)
                 options = {memory: {role: 'defender'}            }
@@ -114,12 +126,6 @@ export class AutoSpawn {
             name = 'Attacker' + Game.time;
             bodyParts = SpawnUtils.getBodyPartsForArchetype('attacker', energyAvailable)
             options = {memory: {role: 'attacker'} }
-        }
-
-        else if(rangedAttackers.length < 0) {
-            name = 'RangedAttacker' + Game.time;
-            bodyParts = SpawnUtils.getBodyPartsForArchetype('rangedAttacker', energyAvailable)
-            options = {memory: {role: 'rangedAttacker'} }
         }
 
         else if(healers.length < 2) {
@@ -138,14 +144,20 @@ export class AutoSpawn {
                 {align: 'left', opacity: 0.8});
         } else if (bodyParts != null && name != null) {
             let spawnResult = Game.spawns[spawnName].spawnCreep(bodyParts,name, options);
+            spawnResult
         }
 
+    }
+
+    private static getSentryNumber(roomKey: string) {
+        const blueFlags = Game.rooms[roomKey].find(FIND_FLAGS).filter((flag) => flag.color === COLOR_BLUE);
+        return blueFlags.length;
     }
 
     public static getNumberOfUpgradersAndBuilders(roomKey: string) {
 
         if(Game.rooms[roomKey].controller?.level ?? 0 < 4) {
-            return 3;
+            return 2;
         }
         const room = Game.rooms[roomKey];
         const currentRatio = room.memory.ratioEnumerator;

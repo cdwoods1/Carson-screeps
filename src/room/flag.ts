@@ -1,4 +1,5 @@
 import { AutoSpawn } from "autospawn";
+import { Squads } from "blueprints/squads/attack-squad";
 import { SpawnUtils } from "utils/SpawnUtils";
 
 export class FlagHandler {
@@ -32,6 +33,21 @@ export class FlagHandler {
     }
 
     private static handleRedFlag(flag: Flag): void {
+        const blueprint = Squads.baseAttackSquad;
+        const pos = flag.pos;
+
+        let readyToAttack = true;
+        for(let row = pos.x; row < pos.x + blueprint.length; row++) {
+            for(let col = pos.y; col < pos.y + blueprint[0].length; col++) {
+                // const type = blueprint[row - pos.x][col - pos.y];
+                // const name = `${type}-${Game.time}`;
+                // const bodyParts = SpawnUtils.getBodyPartsForArchetype(type, 300);
+                // const options = {memory: {role: type}};
+
+                // Game.spawns["Spawn1"].spawnCreep(bodyParts, name, options);
+            }
+        }
+
         console.log("Handling red flag");
     }
 
@@ -40,31 +56,13 @@ export class FlagHandler {
     }
 
     private static handleBlueFlag(flag: Flag): void {
-        const creepID = flag.memory.sentryCreepID;
-        const roomName = flag.room?.name;
-        if(!roomName) {
-            return;
-        }
-        if(creepID) {
-            const creep = Game.getObjectById(creepID) as Creep;
-
+        const sentryCreepID = Game.flags[flag.name].memory.sentryCreepID;
+        if(sentryCreepID) {
+            const creep = Game.getObjectById(sentryCreepID);
             if(!creep) {
-                AutoSpawn.run('rangedAttacker', roomName);
+                delete Game.flags[flag.name].memory.sentryCreepID;
             }
-
-            if(creep.ticksToLive < 100) {
-                SpawnUtils.getBodyPartsForArchetype('rangedAttacker');
-            }
-
-        } else {
-
         }
-
-
-
-
-        // Get a sentry.
-
         console.log("Handling blue flag");
     }
 

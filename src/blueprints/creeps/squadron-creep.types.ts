@@ -5,6 +5,8 @@ export type CreepTypes =
     "healer" |
     "ranger" |
     "scout" |
-    "sentry";
+    "sentry" |
+    "none";
 
 export type CreepBluePrints = SentryCreep;
+

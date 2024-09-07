@@ -9,12 +9,14 @@ import { Collector } from "roles/collector";
 import { RoomService } from "roomservice";
 import { Claimer } from "roles/claimer";
 import { Extensioner } from "roles/extensioner";
-import { RangedAttacker } from "roles/ranged-attacker";
+import { Sentry } from "roles/sentry";
 import { Attacker } from "roles/attacker";
 import { Healer } from "roles/healer";
 import { Immigrant } from "roles/immigrant";
 import { RoomUtils } from "utils/RoomUtils";
-import { BaseCreepMemory } from "memory/creep/creep-memory.types";
+import { BaseCreepMemory, CreepRoles } from "memory/creep/creep-memory.types";
+import { Hauler } from "roles/hauler";
+import { SpawnAction, SpawnQueue } from "spawn/SpawnQueue";
 
 export const ATTACK_THOSE_BOIS: boolean = false;
 
@@ -44,7 +46,7 @@ declare global {
 
     creepMemory?: BaseCreepMemory;
 
-    role: string;
+    role: CreepRoles;
     room?: string;
     working?: boolean;
     upgrading?: boolean;
@@ -60,6 +62,11 @@ declare global {
 
     // Collector memory.
     targetContainerID?: Id<StructureContainer>;
+
+    // Sentry memory.
+    targetFlag?: Flag;
+
+    spawnedFrom: Id<any> | Flag;
   }
 
 
@@ -76,7 +83,7 @@ declare global {
 
     currentContainerEnergy: number;
 
-    receivingContainerID: Id<StructureContainer>;
+    receivingContainerID?: Id<StructureContainer>;
     fullestContainerID: Id<StructureContainer>;
 
   }
@@ -84,6 +91,10 @@ declare global {
   interface FlagMemory {
     // Blue flag
     sentryCreepID?: Id<Creep>;
+  }
+
+  interface SpawnMemory {
+    spawnQueue: SpawnAction[];
   }
 
   type RoomKeys = 'W7N5';
@@ -97,6 +108,8 @@ declare global {
       timeSinceRoomsChecked: number;
     }
   }
+
+
 
 
 }
@@ -118,44 +131,44 @@ export const loop = ErrorMapper.wrapLoop(() => {
   // Creep behavior loop.
   for(var name in Game.creeps) {
     var creep = Game.creeps[name];
-    if(creep.memory.role == 'harvester') {
+
+    switch(creep.memory.role) {
+      case 'harvester':
         Harvester.run(creep);
-    }
-    if(creep.memory.role == 'upgrader') {
+        break;
+      case 'upgrader':
         Upgrader.run(creep);
-    }
-    if(creep.memory.role == 'builder') {
+        break;
+      case 'builder':
         Builder.run(creep);
-    }
-    if(creep.memory.role == 'defender') {
-      Defender.run(creep);
-    }
-    if(creep.memory.role == 'repairer') {
-      Repairer.run(creep);
-    }
-    if(creep.memory.role == "collector") {
-      Collector.run(creep);
-    }
-    if(creep.memory.role == 'claimer') {
-      Claimer.run(creep);
-    }
-    if(creep.memory.role == 'extensioner') {
-      Extensioner.run(creep);
-    }
-
-    if(creep.memory.role == 'rangedAttacker') {
-      RangedAttacker.run(creep);
-    }
-
-    if(creep.memory.role == "attacker") {
-      Attacker.run(creep);
-    }
-
-    if(creep.memory.role == "healer") {
-      Healer.run(creep);
-    }
-    if(creep.memory.role == "immigrant") {
-      Immigrant.run(creep);
+        break;
+      case 'defender':
+        Defender.run(creep);
+        break;
+      case 'repairer':
+        Repairer.run(creep);
+        break;
+      case 'collector':
+        Collector.run(creep);
+        break;
+      case 'claimer':
+        Claimer.run(creep);
+        break;
+      case 'extensioner':
+        Extensioner.run(creep);
+        break;
+      case 'sentry':
+        Sentry.run(creep);
+        break;
+      case 'attacker':
+        Attacker.run(creep);
+        break;
+      case 'healer':
+        Healer.run(creep);
+        break;
+      case 'hauler':
+        Hauler.run(creep);
+        break;
     }
   }
 });

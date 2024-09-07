@@ -1,4 +1,4 @@
-export type BasicCreepTypes =
+export type CreepRoles =
     'harvester' |
     'repairer' |
     'collector' |
@@ -7,10 +7,11 @@ export type BasicCreepTypes =
     'builder' |
     'defender' |
     'claimer' |
-    'rangedAttacker' |
+    'sentry' |
     'healer' |
     'attacker' |
-    'immigrant';
+    'immigrant' |
+    'hauler';
 
 
 export type BaseCreepMemory = CollectorMemory;

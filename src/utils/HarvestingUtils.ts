@@ -27,7 +27,7 @@ export class HarvestingUtils {
             return;
         }
 
-        if(currentRatio < Math.min(minimumEnergyThreshold, 0) && store && store.store.getUsedCapacity(RESOURCE_ENERGY) < 300000) {
+        if(currentRatio < Math.min(minimumEnergyThreshold, -1) && store && store.store.getUsedCapacity(RESOURCE_ENERGY) < 300000) {
             const container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType === STRUCTURE_CONTAINER) &&

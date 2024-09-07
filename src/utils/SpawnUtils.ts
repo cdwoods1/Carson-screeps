@@ -1,4 +1,4 @@
-import { BasicCreepTypes } from "memory/creep/creep-memory.types";
+import { CreepRoles } from "memory/creep/creep-memory.types";
 
 export const BodyPartsCost: Record<BodyPartConstant, number> = {
     "move": 50,
@@ -12,25 +12,26 @@ export const BodyPartsCost: Record<BodyPartConstant, number> = {
 };
 
 export type GenerateCreepStats = {
-    role: BasicCreepTypes;
+    role: CreepRoles;
     partsPattern: Array<BodyPartConstant>;
     partsMax: CreepMaxMap | undefined;
     partsMin: CreepMaxMap | undefined;
 }
 
-export const CreepBaseBodyParts: Record<BasicCreepTypes, Array<BodyPartConstant>> = {
+export const CreepBaseBodyParts: Record<CreepRoles, Array<BodyPartConstant>> = {
     'harvester': [MOVE, WORK, CARRY],
     'repairer': [MOVE, WORK, CARRY],
     'collector': [MOVE, WORK, CARRY],
-    'extensioner': [MOVE, WORK, CARRY],
+    'extensioner': [MOVE, CARRY],
     'upgrader': [MOVE, WORK, WORK, CARRY],
     'builder': [MOVE, WORK, WORK, CARRY],
     'defender': [MOVE, ATTACK, TOUGH],
     'claimer': [CLAIM, MOVE],
-    'rangedAttacker': [MOVE, RANGED_ATTACK, RANGED_ATTACK, TOUGH, HEAL],
+    'sentry': [MOVE, RANGED_ATTACK, RANGED_ATTACK, TOUGH, HEAL],
     'healer': [MOVE, HEAL],
     'attacker': [MOVE, ATTACK, TOUGH],
-    'immigrant': [MOVE, WORK, CARRY]
+    'immigrant': [MOVE, WORK, CARRY],
+    'hauler': [MOVE, CARRY]
 }
 
 export type CreepMax = {
@@ -40,22 +41,23 @@ export type CreepMax = {
 
 export type CreepMaxMap = Map<BodyPartConstant, number>;
 //Undefined means there is no max
-export const CreepMaxBodyParts: Record<BasicCreepTypes, CreepMaxMap | undefined> = {
+export const CreepMaxBodyParts: Record<CreepRoles, CreepMaxMap | undefined> = {
     'harvester': new Map([[WORK, 6], [CARRY, 3], [MOVE, 2]]),
     'repairer': new Map([[WORK, 3], [CARRY, 5], [MOVE, 3]]),
     'collector': new Map([[WORK, 2], [CARRY, 3], [MOVE, 2]]),
-    'extensioner': new Map([[WORK, 1], [CARRY, 10], [MOVE, 7]]),
+    'extensioner': new Map([[CARRY, 10], [MOVE, 7]]),
     'upgrader': new Map([[WORK, 8], [CARRY, 7], [MOVE, 5]]),
     'builder': new Map([[WORK, 3], [CARRY, 4], [MOVE, 7]]),
     'defender': new Map([[ATTACK, 5], [MOVE, 7], [TOUGH, 7]]),
     'claimer': new Map([[CLAIM, 1], [MOVE, 8]]),
-    'rangedAttacker': new Map([[RANGED_ATTACK, 6], [MOVE, 7], [TOUGH, 7], [HEAL, 2]]),
+    'sentry': new Map([[RANGED_ATTACK, 6], [MOVE, 7], [TOUGH, 7], [HEAL, 2]]),
     'healer': new Map([[HEAL, 8], [MOVE, 5], [TOUGH, 9]]),
     'attacker': new Map([[ATTACK, 8], [MOVE, 8], [TOUGH, 10]]),
     'immigrant':  new Map([[WORK, 7], [CARRY, 3], [MOVE, 8]]),
+    'hauler': new Map([[CARRY, 16], [MOVE, 16]])
 }
 
-export const CrepeMinBodyParts: Record<BasicCreepTypes, CreepMaxMap | undefined> = {
+export const CrepeMinBodyParts: Record<CreepRoles, CreepMaxMap | undefined> = {
     'harvester': undefined,
     'repairer': undefined,
     'collector': undefined,
@@ -64,10 +66,11 @@ export const CrepeMinBodyParts: Record<BasicCreepTypes, CreepMaxMap | undefined>
     'builder': undefined,
     'defender': undefined,
     'claimer': undefined,
-    'rangedAttacker': new Map([[RANGED_ATTACK, 6], [MOVE, 7], [TOUGH, 9]]),
+    'sentry': undefined,
     'healer': new Map([[HEAL, 5], [MOVE, 5]]),
     'attacker': new Map([[ATTACK, 5], [MOVE, 7], [TOUGH, 15]]),
-    'immigrant': undefined
+    'immigrant': undefined,
+    'hauler': new Map([[CARRY, 6], [MOVE, 6]])
 }
 
 
@@ -79,7 +82,7 @@ export class SpawnUtils {
     * TODO: Make this more typesafe by using a type for archetype instead of a string.
     * TODO: Use factory pattern or something to get rid of the switch statements. For example, each role can be required to describe it's parts pattern.
     */
-    public static getBodyPartsForArchetype(archetype: BasicCreepTypes, energyAvailable: number): Array<BodyPartConstant> | null {
+    public static getBodyPartsForArchetype(archetype: CreepRoles, energyAvailable: number): Array<BodyPartConstant> | null {
         const newCreepState: GenerateCreepStats = {
             role: archetype,
             partsPattern: CreepBaseBodyParts[archetype],

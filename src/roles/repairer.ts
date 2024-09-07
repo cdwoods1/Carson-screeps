@@ -47,6 +47,15 @@ export class Repairer {
                 return;
             }
 
+
+            if(creep.room.controller?.my && creep.room.controller?.level < 6) {
+                if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
+                }
+                return;
+            }
+
+
             const potentialRepairingID = creep.memory.objectRepairingID;
             if(potentialRepairingID) {
                 const potentialSavedRepairer = Game.getObjectById(potentialRepairingID);

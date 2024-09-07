@@ -14,15 +14,23 @@ export class Builder {
 
         if(creep.memory.building) {
 
-            var tower = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+            const numberOfConstructionSites = creep.room.find(FIND_CONSTRUCTION_SITES).length;
+
+            const containerConstructionSites = creep.room.find(FIND_CONSTRUCTION_SITES, {
                 filter: (structure) => {
-                    return structure.structureType === STRUCTURE_TOWER &&
-                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                    return structure.structureType === STRUCTURE_CONTAINER;
                 }
             });
-            if(tower) {
-                if(creep.transfer(tower, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(tower, {visualizePathStyle: {stroke: '#ffffff'}});
+            if(containerConstructionSites.length > 0) {
+                if(creep.build(containerConstructionSites[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(containerConstructionSites[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                }
+                return;
+            }
+
+            if(creep.room.controller && creep.room.controller.level < 6) {
+                if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
                 return;
             }
@@ -39,6 +47,19 @@ export class Builder {
                     }
                     return;
                 }
+            }
+
+            var tower = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return structure.structureType === STRUCTURE_TOWER &&
+                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                }
+            });
+            if(tower) {
+                if(creep.transfer(tower, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(tower, {visualizePathStyle: {stroke: '#ffffff'}});
+                }
+                return;
             }
 
             var container = creep.room.find(FIND_CONSTRUCTION_SITES, {
