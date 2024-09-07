@@ -54,7 +54,7 @@ export const CreepMaxBodyParts: Record<CreepRoles, CreepMaxMap | undefined> = {
     'healer': new Map([[HEAL, 8], [MOVE, 5], [TOUGH, 9]]),
     'attacker': new Map([[ATTACK, 8], [MOVE, 8], [TOUGH, 10]]),
     'immigrant':  new Map([[WORK, 7], [CARRY, 3], [MOVE, 8]]),
-    'hauler': new Map([[CARRY, 16], [MOVE, 16]])
+    'hauler': new Map([[CARRY, 20], [MOVE, 20]])
 }
 
 export const CrepeMinBodyParts: Record<CreepRoles, CreepMaxMap | undefined> = {

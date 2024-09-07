@@ -10,7 +10,7 @@ export class AutoSpawn {
         let name = null;
         let options: {memory: CreepMemory | undefined } | undefined = undefined;
         let defenders = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender' && creep.room.name === roomKey);
-        let harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester'&& creep.room.name === roomKey);
+        let harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester'&& creep.room.name === roomKey && (!creep.ticksToLive || creep.ticksToLive > 100));
         let upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader'&& creep.room.name === roomKey);
         let builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder'&& creep.room.name === roomKey);
         let repairers = _.filter(Game.creeps, (creep) => creep.memory.role == 'repairer'&& creep.room.name === roomKey);

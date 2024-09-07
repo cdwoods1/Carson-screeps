@@ -22,7 +22,7 @@ export class Repairer {
                     structure.room.name === creep.room.name
                 } })[0] as StructureStorage;
 
-            if(storage && storage.store.energy < 100000 && currentRatio < 0) {
+            if(storage && storage.store.energy < 100000 && currentRatio < -1) {
                 const road = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                     filter: object => object.structureType === STRUCTURE_ROAD && object.hits < object.hitsMax * .1
                 });

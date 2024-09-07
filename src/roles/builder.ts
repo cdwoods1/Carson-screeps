@@ -16,14 +16,17 @@ export class Builder {
 
             const numberOfConstructionSites = creep.room.find(FIND_CONSTRUCTION_SITES).length;
 
-            const containerConstructionSites = creep.room.find(FIND_CONSTRUCTION_SITES, {
+            const priorityConstructionSites = creep.room.find(FIND_CONSTRUCTION_SITES, {
                 filter: (structure) => {
-                    return structure.structureType === STRUCTURE_CONTAINER;
+                    return structure.structureType === STRUCTURE_CONTAINER ||
+                        structure.structureType === STRUCTURE_STORAGE ||
+                        structure.structureType === STRUCTURE_LINK ||
+                        structure.structureType === STRUCTURE_EXTENSION;
                 }
             });
-            if(containerConstructionSites.length > 0) {
-                if(creep.build(containerConstructionSites[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(containerConstructionSites[0], {visualizePathStyle: {stroke: '#ffffff'}});
+            if(priorityConstructionSites.length > 0) {
+                if(creep.build(priorityConstructionSites[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(priorityConstructionSites[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
                 return;
             }

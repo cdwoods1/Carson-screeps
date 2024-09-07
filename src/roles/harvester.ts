@@ -19,6 +19,23 @@ export class Harvester {
             const link = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (
+                        structure.structureType === STRUCTURE_LINK &&
+                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0 &&
+                        structure.structureType !== Game.rooms[creep.room.name].memory.receivingLink
+                    )
+                }
+            });
+
+            if(link) {
+                if(creep.transfer(link, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    return;
+                }
+                return;
+            }
+
+            const otherContainerTypes = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                filter: (structure) => {
+                    return (
                         structure.structureType === STRUCTURE_LINK ||
                         structure.structureType === STRUCTURE_CONTAINER ||
                         structure.structureType === STRUCTURE_STORAGE) &&
@@ -27,8 +44,8 @@ export class Harvester {
                 }
             });
 
-            if(link) {
-                if(creep.transfer(link, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+            if(otherContainerTypes) {
+                if(creep.transfer(otherContainerTypes, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     return;
                 }
                 return;

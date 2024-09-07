@@ -66,7 +66,7 @@ declare global {
     // Sentry memory.
     targetFlag?: Flag;
 
-    spawnedFrom: Id<any> | Flag;
+    spawnedFrom?: Id<any> | Flag;
   }
 
 
@@ -84,7 +84,7 @@ declare global {
     currentContainerEnergy: number;
 
     receivingContainerID?: Id<StructureContainer>;
-    fullestContainerID: Id<StructureContainer>;
+    fullestContainerID?: Id<StructureContainer>;
 
   }
 

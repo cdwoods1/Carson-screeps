@@ -19,6 +19,8 @@ export class Hauler {
                             creep.moveTo(fullestContainer, {visualizePathStyle: {stroke: '#ffaa00'}});
                         }
                         return;
+                    } else {
+                        delete creep.memory.targetContainerID;
                     }
                 } else {
                     creep.memory.targetContainerID = Game.rooms[creep.room.name].memory.fullestContainerID;

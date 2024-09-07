@@ -5,7 +5,11 @@ export class Container {
         const currentEnergy = container.store.energy;
 
         if(fullestContainerID) {
-            const fullestContainer = Game.getObjectById(fullestContainerID) as StructureContainer;
+            const fullestContainer = Game.getObjectById(fullestContainerID);
+            if(!fullestContainer) {
+                delete Game.rooms[container.room.name].memory.fullestContainerID;
+                return;
+            }
             const fullestContainerEnergy = fullestContainer.store.energy;
             const receivingContainerID = Game.rooms[container.room.name].memory.receivingContainerID;
 

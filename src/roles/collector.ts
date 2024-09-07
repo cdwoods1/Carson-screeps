@@ -54,10 +54,10 @@ export class Collector {
                 return;
             }
 
-                var sources = creep.room.find(FIND_SOURCES);
-                if(creep.harvest(sources[creep.memory.targetSource ?? 0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(sources[creep.memory.targetSource ?? 0], {visualizePathStyle: {stroke: '#ffaa00'}});
-                }
+                // var sources = creep.room.find(FIND_SOURCES);
+                // if(creep.harvest(sources[creep.memory.targetSource ?? 0]) == ERR_NOT_IN_RANGE) {
+                //     creep.moveTo(sources[creep.memory.targetSource ?? 0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                // }
 
             // var energy = creep.room.find(FIND_DROPPED_RESOURCES);
             // if(energy.length > 0) {
