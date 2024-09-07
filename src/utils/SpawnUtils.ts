@@ -1,3 +1,5 @@
+import { BasicCreepTypes } from "memory/creep/creep-memory.types";
+
 export const BodyPartsCost: Record<BodyPartConstant, number> = {
     "move": 50,
     "work": 100,
@@ -9,28 +11,14 @@ export const BodyPartsCost: Record<BodyPartConstant, number> = {
     "claim": 600,
 };
 
-export type CreepTypes =
-    'harvester' |
-    'repairer' |
-    'collector' |
-    'extensioner' |
-    'upgrader' |
-    'builder' |
-    'defender' |
-    'claimer' |
-    'rangedAttacker' |
-    'healer' |
-    'attacker' |
-    'immigrant'
-
 export type GenerateCreepStats = {
-    role: CreepTypes;
+    role: BasicCreepTypes;
     partsPattern: Array<BodyPartConstant>;
     partsMax: CreepMaxMap | undefined;
     partsMin: CreepMaxMap | undefined;
 }
 
-export const CreepBaseBodyParts: Record<CreepTypes, Array<BodyPartConstant>> = {
+export const CreepBaseBodyParts: Record<BasicCreepTypes, Array<BodyPartConstant>> = {
     'harvester': [MOVE, WORK, CARRY],
     'repairer': [MOVE, WORK, CARRY],
     'collector': [MOVE, WORK, CARRY],
@@ -52,7 +40,7 @@ export type CreepMax = {
 
 export type CreepMaxMap = Map<BodyPartConstant, number>;
 //Undefined means there is no max
-export const CreepMaxBodyParts: Record<CreepTypes, CreepMaxMap | undefined> = {
+export const CreepMaxBodyParts: Record<BasicCreepTypes, CreepMaxMap | undefined> = {
     'harvester': new Map([[WORK, 6], [CARRY, 3], [MOVE, 2]]),
     'repairer': new Map([[WORK, 3], [CARRY, 5], [MOVE, 3]]),
     'collector': new Map([[WORK, 2], [CARRY, 3], [MOVE, 2]]),
@@ -67,7 +55,7 @@ export const CreepMaxBodyParts: Record<CreepTypes, CreepMaxMap | undefined> = {
     'immigrant':  new Map([[WORK, 7], [CARRY, 3], [MOVE, 8]]),
 }
 
-export const CrepeMinBodyParts: Record<CreepTypes, CreepMaxMap | undefined> = {
+export const CrepeMinBodyParts: Record<BasicCreepTypes, CreepMaxMap | undefined> = {
     'harvester': undefined,
     'repairer': undefined,
     'collector': undefined,
@@ -91,7 +79,7 @@ export class SpawnUtils {
     * TODO: Make this more typesafe by using a type for archetype instead of a string.
     * TODO: Use factory pattern or something to get rid of the switch statements. For example, each role can be required to describe it's parts pattern.
     */
-    public static getBodyPartsForArchetype(archetype: CreepTypes, energyAvailable: number): Array<BodyPartConstant> | null {
+    public static getBodyPartsForArchetype(archetype: BasicCreepTypes, energyAvailable: number): Array<BodyPartConstant> | null {
         const newCreepState: GenerateCreepStats = {
             role: archetype,
             partsPattern: CreepBaseBodyParts[archetype],

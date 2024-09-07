@@ -18,7 +18,7 @@ export class Upgrader {
             }
         }
         else {
-           HarvestingUtils.harvestFromContainers(creep, RESOURCE_ENERGY, 0.0);
+           HarvestingUtils.harvestFromContainers(creep, RESOURCE_ENERGY, -1.0);
         }
     }
 }

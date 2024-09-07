@@ -14,6 +14,7 @@ import { Attacker } from "roles/attacker";
 import { Healer } from "roles/healer";
 import { Immigrant } from "roles/immigrant";
 import { RoomUtils } from "utils/RoomUtils";
+import { BaseCreepMemory } from "memory/creep/creep-memory.types";
 
 export const ATTACK_THOSE_BOIS: boolean = false;
 
@@ -40,6 +41,9 @@ declare global {
   }
 
   interface CreepMemory {
+
+    creepMemory?: BaseCreepMemory;
+
     role: string;
     room?: string;
     working?: boolean;
@@ -78,7 +82,8 @@ declare global {
   }
 
   interface FlagMemory {
-
+    // Blue flag
+    sentryCreepID?: Id<Creep>;
   }
 
   type RoomKeys = 'W7N5';

@@ -1,5 +1,6 @@
 import { Container } from "room/container";
 import { Controller } from "room/controller";
+import { FlagHandler } from "room/flag";
 import { Link } from "room/link";
 import { Rampart } from "room/rampart";
 import { Storage } from "room/storage";
@@ -13,6 +14,13 @@ export class RoomService {
         RoomService.handleStorage(roomID);
         RoomService.handleControllers(roomID);
         RoomService.handleContainers(roomID);
+        RoomService.handleFlags(roomID);
+    }
+
+    private static handleFlags(roomID: string): void {
+      for(var flag of Game.rooms[roomID].find(FIND_FLAGS)) {
+        FlagHandler.run(flag);
+      }
     }
 
     private static handleContainers(roomID: string): void {

@@ -15,9 +15,6 @@ export class RoomUtils {
             }
 
             const spawns = room.find(FIND_MY_SPAWNS);
-            if(spawns.length === 0) {
-                continue;
-            }
 
             for(const spawn of spawns) {
                 AutoSpawn.run(spawn.name, roomKey);
