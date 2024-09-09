@@ -75,15 +75,15 @@ export class SpawnQueue {
             Game.spawns[spawn.name].memory.spawnQueue = [];
         }
 
-        // Only allow one item at a time to be queued from the same location.
-        // TODO: Find a way to allow multiple spawns at once while not overloading the queue.
-        const hasItem = spawnQueue.some((item) => {
-            return item.spawnedFrom === spawnAction.spawnedFrom;
-        });
+        // // Only allow one item at a time to be queued from the same location.
+        // // TODO: Find a way to allow multiple spawns at once while not overloading the queue.
+        // const hasItem = spawnQueue.some((item) => {
+        //     return item.spawnedFrom === spawnAction.spawnedFrom;
+        // });
 
-        if(hasItem) {
-            return;
-        }
+        // if(hasItem) {
+        //     return;
+        // }
 
         Game.spawns[spawn.name].memory.spawnQueue.push(spawnAction);
         Game.spawns[spawn.name].memory.spawnQueue =  Game.spawns[spawn.name].memory.spawnQueue.sort((a, b) => {

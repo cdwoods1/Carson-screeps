@@ -19,6 +19,7 @@ export class RoomUtils {
 
             for(const spawn of spawns) {
                 SpawnQueue.run(spawn);
+                AutoSpawn.run(spawn.name, roomKey);
             }
 
             RoomService.run(roomKey);
@@ -26,7 +27,7 @@ export class RoomUtils {
     }
 
     public static findMyRooms(): void {
-        if(global.timeSinceRoomsChecked > 200 || !global.myRooms) {
+        if(global.timeSinceRoomsChecked > 10 || !global.myRooms) {
             global.myRooms = [];
             for(const roomKey in Game.rooms) {
                 const room = Game.rooms[roomKey];

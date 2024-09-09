@@ -2,7 +2,7 @@ import { HarvestingUtils } from "utils/HarvestingUtils";
 
 export class Immigrant {
     public static run(creep: Creep): void {
-        const flag = Game.flags.ClaimOne;
+        const flag = Game.flags.ClaimFlag;
         if(flag && creep.room !== flag.room) {
             creep.moveTo(flag, {visualizePathStyle: {stroke: '#ff0000'}});
             return;

@@ -80,7 +80,10 @@ export class Harvester {
     private static fillLinks(creep: Creep) {
         const link = creep.pos.findClosestByRange(FIND_STRUCTURES, {
             filter: (structure) => {
-                return (structure.structureType === STRUCTURE_LINK || structure.structureType === STRUCTURE_CONTAINER || structure.structureType === STRUCTURE_STORAGE) && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+                return (structure.structureType === STRUCTURE_LINK ||
+                    structure.structureType === STRUCTURE_CONTAINER ||
+                    structure.structureType === STRUCTURE_STORAGE) &&
+                    structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
             }
         });
 
@@ -95,11 +98,26 @@ export class Harvester {
 
     private static fillAlternateTargets(creep: Creep) {
 
+        const spawn = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType === STRUCTURE_SPAWN) &&
+                    structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
+            }
+        });
+
+        if(spawn) {
+            if(creep.transfer(spawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(spawn, {visualizePathStyle: {stroke: '#ffffff'}});
+            }
+            return true;
+        }
+
         const controller = creep.room.controller;
         if(controller && controller.my && controller.level < 4) {
             if(creep.upgradeController(controller) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(controller, {visualizePathStyle: {stroke: '#ffffff'}});
             }
+            return;
         }
 
         var targets = creep.room.find(FIND_STRUCTURES, {
@@ -125,11 +143,13 @@ export class Harvester {
         //     return true;
         // }
 
-        if(creep.room.controller &&
+        if(creep.room.controller && creep.room.controller.my &&
             creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
             creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
             return true;
         }
-        return false;
+
+        creep.moveTo(Game.flags["HarvesterHelp"], {visualizePathStyle: {stroke: '#ffffff'}});
+        return;
     }
 }

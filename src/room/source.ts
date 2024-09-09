@@ -3,11 +3,7 @@ import { SpawnUtils } from "utils/SpawnUtils";
 
 export class SourceHandler {
     public static run(source: Source) {
-        const sourceCreeps = Game.rooms[source.room.name].find(FIND_MY_CREEPS, {
-            filter: (creep) => {
-                return creep.memory.targetSourceID === source.id
-            }
-        });
+        const sourceCreeps = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester' && creep.memory.targetSourceID === source.id);
 
         console.log(`Source ${source.id} has ${sourceCreeps} creeps`);
 

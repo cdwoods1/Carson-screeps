@@ -35,10 +35,10 @@ export class RoomService {
       }
 
       const haulers = _.filter(Game.creeps, (creep) => creep.memory.role == 'hauler' && creep.room.name === roomID);
-      if(haulers.length < 2) {
+      if(haulers.length < 1) {
         const numberInQueue = SpawnQueue.numCreepsinQueue(roomID, 'hauler');
 
-        if(numberInQueue < 2) {
+        if(numberInQueue < 1) {
           const closestSpawn = Game.rooms[roomID].find(FIND_MY_SPAWNS)[0];
           SpawnQueue.addToQueue(closestSpawn, {
             priority: 'emergency',
@@ -58,11 +58,15 @@ export class RoomService {
         return;
       }
 
+      console.log('Construction sites found');
+
       const builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder'&& creep.room.name === roomID);
-      if(builders.length < 3) {
+      console.log(builders.length);
+      if(builders.length < 5) {
+        console.log('Spawning builder');
         const numberInQueue = SpawnQueue.numCreepsinQueue(roomID, 'builder');
 
-        if(numberInQueue < 3) {
+        if(numberInQueue < 5) {
           const closestSpawn = Game.rooms[roomID].find(FIND_MY_SPAWNS)[0];
           SpawnQueue.addToQueue(closestSpawn, {
             priority: 'emergency',

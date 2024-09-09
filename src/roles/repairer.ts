@@ -48,12 +48,14 @@ export class Repairer {
             }
 
 
-            if(creep.room.controller?.my && creep.room.controller?.level < 6) {
-                if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
-                }
-                return;
-            }
+            // if(creep.room.controller?.my && creep.room.controller?.level < 6) {
+            //     if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+            //         creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
+            //     }
+            //     return;
+            // }
+
+
 
 
             const potentialRepairingID = creep.memory.objectRepairingID;
@@ -160,10 +162,14 @@ export class Repairer {
                 }
                 return;
             }
-            var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+            var source = creep.pos.findClosestByRange(FIND_SOURCES);
+            if(source && creep.harvest(source) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
             }
+            if(creep.room.name !== Game.flags["HarvesterHelp"].pos.roomName) {
+                creep.moveTo(Game.flags["HarvesterHelp"], {visualizePathStyle: {stroke: '#ffffff'}});
+            }
+
         }
     }
 }

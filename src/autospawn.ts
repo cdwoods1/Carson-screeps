@@ -76,12 +76,6 @@ export class AutoSpawn {
             bodyParts = SpawnUtils.getBodyPartsForArchetype('extensioner', energyAvailable)
             options = {memory: {role: 'extensioner'} }
         }
-        // else if (harvesters.length < numHarvesters) {
-        //     console.log("spawning harvester");
-        //     name = 'Harvester' + Game.time;
-        //     bodyParts = SpawnUtils.getBodyPartsForArchetype('harvester', energyAvailable)
-        //         options = {memory: {role: 'harvester', targetSource: newSourceTarget }                }
-        //
         else if(extensioner.length < 1) {
             name = 'Extensioner' + Game.time;
             bodyParts = SpawnUtils.getBodyPartsForArchetype('extensioner', energyAvailable)
@@ -110,11 +104,7 @@ export class AutoSpawn {
             name = 'Upgrader' + Game.time;
             bodyParts = SpawnUtils.getBodyPartsForArchetype('upgrader', energyAvailable)
                 options = {memory: {role: 'upgrader'}                }
-        } else if(builders.length < AutoSpawn.getNumberOfUpgradersAndBuilders(roomKey)) {
-            name = 'Builder' + Game.time;
-            bodyParts = SpawnUtils.getBodyPartsForArchetype('builder', energyAvailable)
-            options = {memory: {role: 'builder', travelling: false}                }
-        }  else if(repairers.length < 2) {
+        } else if(repairers.length < 2) {
                 name = 'Repairer' + Game.time;
                 bodyParts = SpawnUtils.getBodyPartsForArchetype('repairer', energyAvailable)
                     options = {memory: {role: 'repairer'}            }

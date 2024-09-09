@@ -13,6 +13,7 @@ export class Hauler {
         }
         if(!creep.memory.delivering) {
             const droppedEnergy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES);
+            console.log(droppedEnergy);
             if(droppedEnergy) {
                 if(creep.pickup(droppedEnergy) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(droppedEnergy, {visualizePathStyle: {stroke: '#ffaa00'}});

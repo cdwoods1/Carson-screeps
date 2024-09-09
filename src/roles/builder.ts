@@ -15,7 +15,7 @@ export class Builder {
         if(creep.memory.building) {
             const numberOfConstructionSites = creep.room.find(FIND_CONSTRUCTION_SITES).length;
 
-            const priorityConstructionSites = creep.room.find(FIND_CONSTRUCTION_SITES, {
+            const priorityConstructionSite = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES, {
                 filter: (structure) => {
                     return structure.structureType === STRUCTURE_CONTAINER ||
                         structure.structureType === STRUCTURE_STORAGE ||
@@ -24,9 +24,9 @@ export class Builder {
                         structure.structureType === STRUCTURE_SPAWN;
                 }
             });
-            if(priorityConstructionSites.length > 0) {
-                if(creep.build(priorityConstructionSites[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(priorityConstructionSites[0], {visualizePathStyle: {stroke: '#ffffff'}});
+            if(priorityConstructionSite) {
+                if(creep.build(priorityConstructionSite) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(priorityConstructionSite, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
                 return;
             }
