@@ -11,18 +11,18 @@ export class Extensioner {
             creep.say('⚡ deliver');
         }
         if(!creep.memory.delivering) {
-            const freeEnergy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES, {
-                filter: (resource) => {
-                    return resource.resourceType === RESOURCE_ENERGY;
-                }
-            });
+            // const freeEnergy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES, {
+            //     filter: (resource) => {
+            //         return resource.resourceType === RESOURCE_ENERGY;
+            //     }
+            // });
 
-            if(freeEnergy) {
-                if(creep.pickup(freeEnergy) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(freeEnergy, {visualizePathStyle: {stroke: '#ffaa00'}});
-                }
-                return;
-            }
+            // if(freeEnergy) {
+            //     if(creep.pickup(freeEnergy) == ERR_NOT_IN_RANGE) {
+            //         creep.moveTo(freeEnergy, {visualizePathStyle: {stroke: '#ffaa00'}});
+            //     }
+            //     return;
+            // }
             HarvestingUtils.harvestFromContainers(creep, RESOURCE_ENERGY, -1);
         }
         else {

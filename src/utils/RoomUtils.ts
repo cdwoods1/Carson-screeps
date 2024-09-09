@@ -1,5 +1,6 @@
 import { AutoSpawn } from "autospawn";
 import { RoomService } from "roomservice";
+import { SpawnQueue } from "spawn/SpawnQueue";
 
 export type RoomKeys = 'W7N5';
 
@@ -17,7 +18,7 @@ export class RoomUtils {
             const spawns = room.find(FIND_MY_SPAWNS);
 
             for(const spawn of spawns) {
-                AutoSpawn.run(spawn.name, roomKey);
+                SpawnQueue.run(spawn);
             }
 
             RoomService.run(roomKey);

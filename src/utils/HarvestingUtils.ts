@@ -1,5 +1,5 @@
 export class HarvestingUtils {
-    public static harvestFromContainers(creep: Creep, resourceType: RESOURCE_ENERGY, minimumEnergyThreshold: number = 0.0): void {
+    public static harvestFromContainers(creep: Creep, resourceType: RESOURCE_ENERGY, minimumEnergyThreshold: number = -1.0): void {
 
         const currentRatio = Game.rooms[creep.room.name].memory.ratioEnumerator;
         const store: StructureStorage | null = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {

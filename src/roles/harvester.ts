@@ -1,3 +1,4 @@
+import { info } from "console";
 import { HarvestingUtils } from "utils/HarvestingUtils";
 
 export class Harvester {
@@ -11,9 +12,16 @@ export class Harvester {
             creep.say('⚡ deliver');
         }
         if(!creep.memory.delivering) {
-            var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[creep.memory.targetSource ?? 0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[creep.memory.targetSource ?? 0], {visualizePathStyle: {stroke: '#ffaa00'}});
+            const targetSourceID = creep.memory.targetSourceID;
+            if(!targetSourceID) {
+                console.log(`Harvester ${creep.id} spawned without source`);
+                return;
+            }
+            var source = Game.getObjectById(targetSourceID);
+            if(source) {
+                if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
             }
 
             const link = creep.pos.findClosestByRange(FIND_STRUCTURES, {

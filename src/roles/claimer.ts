@@ -1,6 +1,6 @@
 export class Claimer {
     public static run(creep: Creep) {
-        const flag = Game.flags.ImmigrantDestination;
+        const flag = Game.flags.ClaimOne;
         if(creep.room !== flag.room) {
             creep.moveTo(flag, {visualizePathStyle: {stroke: '#ff0000'}});
         } else {

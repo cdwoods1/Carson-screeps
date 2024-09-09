@@ -67,6 +67,9 @@ declare global {
     targetFlag?: Flag;
 
     spawnedFrom?: Id<any> | Flag;
+
+    // Used for harvesters to determine which source to target.
+    targetSourceID?: Id<Source>;
   }
 
 
@@ -86,6 +89,9 @@ declare global {
     receivingContainerID?: Id<StructureContainer>;
     fullestContainerID?: Id<StructureContainer>;
 
+    // Represents a creep mapped to a source in a room.
+    sourceCreeps: Map<Id<Source>, Id<Creep>>;
+
   }
 
   interface FlagMemory {
@@ -95,6 +101,7 @@ declare global {
 
   interface SpawnMemory {
     spawnQueue: SpawnAction[];
+    ticksSinceLastSort: number;
   }
 
   type RoomKeys = 'W7N5';
@@ -126,7 +133,14 @@ export const loop = ErrorMapper.wrapLoop(() => {
     }
   }
 
+  for(const room in Memory.myRooms) {
+    if(!Game.rooms[room].memory.sourceCreeps) {
+      Game.rooms[room].memory.sourceCreeps = new Map();
+    }
+  }
+
   RoomUtils.run();
+
 
   // Creep behavior loop.
   for(var name in Game.creeps) {
@@ -169,6 +183,8 @@ export const loop = ErrorMapper.wrapLoop(() => {
       case 'hauler':
         Hauler.run(creep);
         break;
+      case 'immigrant':
+        Immigrant.run(creep);
     }
   }
 });

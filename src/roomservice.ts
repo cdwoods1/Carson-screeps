@@ -3,8 +3,11 @@ import { Controller } from "room/controller";
 import { FlagHandler } from "room/flag";
 import { Link } from "room/link";
 import { Rampart } from "room/rampart";
+import { SourceHandler } from "room/source";
 import { Storage } from "room/storage";
 import { Tower } from "room/tower";
+import { RoomKeys } from './utils/RoomUtils';
+import { SpawnQueue } from "spawn/SpawnQueue";
 
 export class RoomService {
     public static run(roomID: string): void {
@@ -15,6 +18,68 @@ export class RoomService {
         RoomService.handleControllers(roomID);
         RoomService.handleContainers(roomID);
         RoomService.handleFlags(roomID);
+        RoomService.handleSources(roomID);
+        RoomService.handleConstructionSites(roomID);
+        RoomService.handleFreeEnergy(roomID);
+    }
+
+    private static handleFreeEnergy(roomID: string): void {
+      const freeEnergy = Game.rooms[roomID].find(FIND_DROPPED_RESOURCES, {
+        filter: (resource) => {
+          return resource.resourceType === RESOURCE_ENERGY;
+        }
+      });
+
+      if(freeEnergy.length === 0) {
+        return;
+      }
+
+      const haulers = _.filter(Game.creeps, (creep) => creep.memory.role == 'hauler' && creep.room.name === roomID);
+      if(haulers.length < 2) {
+        const numberInQueue = SpawnQueue.numCreepsinQueue(roomID, 'hauler');
+
+        if(numberInQueue < 2) {
+          const closestSpawn = Game.rooms[roomID].find(FIND_MY_SPAWNS)[0];
+          SpawnQueue.addToQueue(closestSpawn, {
+            priority: 'emergency',
+            body: [CARRY, CARRY, MOVE],
+            spawnedFrom: closestSpawn.id,
+            options: {
+              role: 'hauler',
+            }
+          });
+        }
+      }
+    }
+
+    private static handleConstructionSites(roomID: string): void {
+      const constructionSites = Game.rooms[roomID].find(FIND_CONSTRUCTION_SITES);
+      if(constructionSites.length === 0) {
+        return;
+      }
+
+      const builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder'&& creep.room.name === roomID);
+      if(builders.length < 3) {
+        const numberInQueue = SpawnQueue.numCreepsinQueue(roomID, 'builder');
+
+        if(numberInQueue < 3) {
+          const closestSpawn = Game.rooms[roomID].find(FIND_MY_SPAWNS)[0];
+          SpawnQueue.addToQueue(closestSpawn, {
+            priority: 'emergency',
+            body: [WORK, CARRY, MOVE],
+            spawnedFrom: closestSpawn.id,
+            options: {
+              role: 'builder',
+            }
+          });
+        }
+      }
+    }
+
+    private static handleSources(roomID: string): void {
+      for(var source of Game.rooms[roomID].find(FIND_SOURCES)) {
+        SourceHandler.run(source);
+      }
     }
 
     private static handleFlags(roomID: string): void {

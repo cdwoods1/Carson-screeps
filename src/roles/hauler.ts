@@ -3,6 +3,7 @@ export class Hauler {
     public static run(creep: Creep): void {
         if(creep.memory.delivering && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.delivering = false;
+            console.log("Container to withdraw from: " + Game.rooms[creep.room.name].memory.fullestContainerID);
             creep.memory.targetContainerID = Game.rooms[creep.room.name].memory.fullestContainerID;
             creep.say('🔄 withdraw');
         }
@@ -11,6 +12,13 @@ export class Hauler {
             creep.say('⚡ haul');
         }
         if(!creep.memory.delivering) {
+            const droppedEnergy = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES);
+            if(droppedEnergy) {
+                if(creep.pickup(droppedEnergy) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(droppedEnergy, {visualizePathStyle: {stroke: '#ffaa00'}});
+                }
+                return;
+            }
             const targetContainerID = creep.memory.targetContainerID;
                 if(targetContainerID) {
                     const fullestContainer = Game.getObjectById(targetContainerID);

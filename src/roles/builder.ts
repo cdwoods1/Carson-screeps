@@ -13,7 +13,6 @@ export class Builder {
         }
 
         if(creep.memory.building) {
-
             const numberOfConstructionSites = creep.room.find(FIND_CONSTRUCTION_SITES).length;
 
             const priorityConstructionSites = creep.room.find(FIND_CONSTRUCTION_SITES, {
@@ -21,7 +20,8 @@ export class Builder {
                     return structure.structureType === STRUCTURE_CONTAINER ||
                         structure.structureType === STRUCTURE_STORAGE ||
                         structure.structureType === STRUCTURE_LINK ||
-                        structure.structureType === STRUCTURE_EXTENSION;
+                        structure.structureType === STRUCTURE_EXTENSION ||
+                        structure.structureType === STRUCTURE_SPAWN;
                 }
             });
             if(priorityConstructionSites.length > 0) {

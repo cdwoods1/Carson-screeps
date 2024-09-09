@@ -16,7 +16,7 @@ export class AutoSpawn {
         let repairers = _.filter(Game.creeps, (creep) => creep.memory.role == 'repairer'&& creep.room.name === roomKey);
         let collectors = _.filter(Game.creeps, (creep) => creep.memory.role == 'collector'&& creep.room.name === roomKey);
         let claimer = _.filter(Game.creeps, (creep) => creep.memory.role == 'claimer');
-        let extensioner = _.filter(Game.creeps, (creep) => creep.memory.role == 'extensioner'&& creep.room.name === roomKey);
+        let extensioner = _.filter(Game.creeps, (creep) => creep.memory.role == 'extensioner'&& creep.room.name === roomKey && (!creep.ticksToLive || creep.ticksToLive > 100));
         let attackers = _.filter(Game.creeps, (creep) => creep.memory.role == 'attacker');
         let sentries = _.filter(Game.creeps, (creep) => creep.memory.role == 'sentry');
         let healers = _.filter(Game.creeps, (creep) => creep.memory.role == 'healer' && creep.room.name === roomKey);
@@ -44,6 +44,8 @@ export class AutoSpawn {
             numCollectors = 1;
         }
 
+        console.log(immigrants.length);
+
         const sourceCounts: Map<number, number> = new Map();
         for(let i = 0; i < harvesters.length; i++) {
             const source = harvesters[i].memory.targetSource ?? 0;
@@ -59,7 +61,11 @@ export class AutoSpawn {
             }
         }
         let energyAvailable = Game.spawns[spawnName].room.energyAvailable;
-        if(immigrants.length < 0) {
+        if(claimer.length < 0) {
+            name = 'Claimer' + Game.time;
+            bodyParts = SpawnUtils.getBodyPartsForArchetype('claimer', energyAvailable)
+            options = {memory: {role: 'claimer'}            }
+    } else if(immigrants.length < 0) {
             name = 'Immigrant' + Game.time;
             bodyParts = SpawnUtils.getBodyPartsForArchetype('immigrant', energyAvailable);
             options = {memory: {role: 'immigrant'}}
@@ -69,12 +75,14 @@ export class AutoSpawn {
             name = 'Extensioner' + Game.time;
             bodyParts = SpawnUtils.getBodyPartsForArchetype('extensioner', energyAvailable)
             options = {memory: {role: 'extensioner'} }
-        } else if (harvesters.length < numHarvesters) {
-            console.log("spawning harvester");
-            name = 'Harvester' + Game.time;
-            bodyParts = SpawnUtils.getBodyPartsForArchetype('harvester', energyAvailable)
-                options = {memory: {role: 'harvester', targetSource: newSourceTarget }                }
-        } else if(extensioner.length < 1) {
+        }
+        // else if (harvesters.length < numHarvesters) {
+        //     console.log("spawning harvester");
+        //     name = 'Harvester' + Game.time;
+        //     bodyParts = SpawnUtils.getBodyPartsForArchetype('harvester', energyAvailable)
+        //         options = {memory: {role: 'harvester', targetSource: newSourceTarget }                }
+        //
+        else if(extensioner.length < 1) {
             name = 'Extensioner' + Game.time;
             bodyParts = SpawnUtils.getBodyPartsForArchetype('extensioner', energyAvailable)
             options = {memory: {role: 'extensioner'} }
@@ -110,10 +118,6 @@ export class AutoSpawn {
                 name = 'Repairer' + Game.time;
                 bodyParts = SpawnUtils.getBodyPartsForArchetype('repairer', energyAvailable)
                     options = {memory: {role: 'repairer'}            }
-        } else if(claimer.length < 0) {
-                name = 'Claimer' + Game.time;
-                bodyParts = SpawnUtils.getBodyPartsForArchetype('claimer', energyAvailable)
-                options = {memory: {role: 'claimer'}            }
         }
 
             else if(defenders.length < 1) {
@@ -128,7 +132,7 @@ export class AutoSpawn {
             options = {memory: {role: 'attacker'} }
         }
 
-        else if(healers.length < 2) {
+        else if(healers.length < 0) {
             name = 'Healer' + Game.time;
             bodyParts = SpawnUtils.getBodyPartsForArchetype('healer', energyAvailable)
             options = {memory: {role: 'healer'} }
